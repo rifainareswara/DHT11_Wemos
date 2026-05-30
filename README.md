@@ -1,40 +1,67 @@
-# DHT11_Wemos — Task 6 (UNSIA IoT 2026)
+# DHT11_HTTPS_Wemos — Task 7 (UNSIA IoT 2026)
 
-PlatformIO project for reading DHT11 sensor on Wemos D1 Mini.
+Secure HTTPS data transmission from Wemos D1 Mini to iot.learnina.org
+using BearSSL with SHA-1 fingerprint pinning (no setInsecure!).
 
-## Wiring
+## Wiring (same as Task 6)
 
-| DHT11 | Wemos D1 Mini |
-|-------|---------------|
-| VCC   | 3.3V          |
-| GND   | GND           |
-| DATA  | D3 (GPIO 0)   |
+| DHT11 | Wemos D1 Mini V4 |
+|-------|------------------|
+| VCC   | 3V3              |
+| GND   | GND              |
+| DATA  | 0 (= GPIO 0)     |
 
-## How to use in VSCode + PlatformIO
+## Before flashing
 
-1. Open VSCode
-2. Install the **PlatformIO IDE** extension if not already installed
-3. File -> Open Folder -> select this `DHT11_Wemos` folder
-4. PlatformIO will auto-detect `platformio.ini` and install dependencies
-5. Click **Build** (the checkmark icon, bottom toolbar) to compile
-6. With Wemos D1 Mini connected via USB: click **Upload** (the right arrow icon)
-7. Open **Serial Monitor** (the plug icon) to see readings at 115200 baud
+Edit `src/main.cpp` -- replace these placeholders:
 
-## Expected output
+```cpp
+#define STASSID "YOUR_WIFI_SSID"
+#define STAPSK  "YOUR_WIFI_PASSWORD"
+```
+
+with your actual WiFi credentials.
+
+The student ID is already set:
+```cpp
+#define STUDENTID "230401010231"
+```
+
+## Build & upload
+
+```bash
+pio run -t upload && pio device monitor
+```
+
+Expected serial output:
 
 ```
-DHT11 Sensor Reader -- Task 6 (PlatformIO + Wemos D1 Mini)
-Reading every 5 seconds...
-
-Humidity: 58.0 %    Temperature: 27.3 C
-Humidity: 58.1 %    Temperature: 27.3 C
-Humidity: 58.0 %    Temperature: 27.4 C
+Task 7: Secure HTTPS DHT11 transmission
+Connecting to WiFi: <ssid>
+....
+WiFi connected. IP: 192.168.x.x
+Requesting URL: https://iot.learnina.org/dht.php?stationid=230401010231&temperature=27.3&humidity=58.0
+HTTP code   : 200
+Server reply: OK
 ...
 ```
 
-## No hardware? Just verify build
+## Submission
 
-Per task instructions, if you don't have a Wemos board:
-- Click **Build** only (do not Upload)
-- Screenshot the "SUCCESS" build output from the terminal
-- That is acceptable for submission
+After running and seeing successful HTTPS responses, visit:
+
+```
+https://iot.learnina.org/station_data.php?stationid=230401010231
+```
+
+Screenshot that page (showing recorded data) and include it in the Word file.
+
+## Curl fallback (if no hardware)
+
+If hardware is unavailable, simulate sending data with curl:
+
+```bash
+curl -k "https://iot.learnina.org/dht.php?stationid=230401010231&temperature=24.3&humidity=55.6"
+```
+
+Then visit the station_data.php URL as above.

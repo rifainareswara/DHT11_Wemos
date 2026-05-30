@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "author": "Rifai (230401010231)",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp8266-d1-mini",
+      "id": "wemos",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht",
+      "top": -40,
+      "left": 180,
+      "attrs": { "temperature": "27", "humidity": "58" }
+    }
+  ],
+  "connections": [
+    [ "dht:VCC", "wemos:3V3", "red",    [ "v0" ] ],
+    [ "dht:GND", "wemos:GND", "black",  [ "v0" ] ],
+    [ "dht:SDA", "wemos:D3",  "yellow", [ "v0" ] ]
+  ],
+  "_note": "Wokwi belum punya part DHT11 native; wokwi-dht22 kompatibel pin-to-pin (VCC/GND/DATA) untuk simulasi. DATA -> D3 (GPIO0) sesuai DHTPIN 0 di main.cpp."
+}
